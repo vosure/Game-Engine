@@ -1,5 +1,3 @@
-
-
 namespace Engine {
 	
 	_declspec(dllimport) void Print();
