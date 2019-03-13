@@ -8,4 +8,6 @@
 	#endif 
 #else
 #error Engine only support Windows!
-#endif // DEBUG
+#endif 
+
+#define BIT(x) (1 << x)
