@@ -10,6 +10,11 @@ workspace "Engine"
 
  outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+ IncludeDir = {}
+ IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
+
+ include "Engine/vendor/GLFW"
+
 project "Engine"
 	location "Engine"
 	kind "SharedLib"
@@ -17,6 +22,9 @@ project "Engine"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("obj/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "enginepch.h"
+	pchsource "Engine/src/enginepch.cpp"
 
 	files
 	{
@@ -27,7 +35,14 @@ project "Engine"
 	includedirs 
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
