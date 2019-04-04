@@ -35,7 +35,7 @@ namespace Engine {
 		virtual void Init(const WindowProps &props);
 		virtual void ShutDown();
 	private:
-		GLFWwindow *m_window;
+		GLFWwindow *m_Window;
 
 		struct WindowData
 		{
