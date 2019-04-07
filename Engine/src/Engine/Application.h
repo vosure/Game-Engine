@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Window.h"
+#include "LayerStack.h"
 
 namespace Engine {
 
@@ -17,10 +18,15 @@ namespace Engine {
 
 		void OnEvent(Event &e);
 
-		bool OnWindowClose(WindowCloseEvent &event);
+		void PushLayer(Layer *layer);
+		void PushOverlay(Layer *layer);
 	private:
+		bool OnWindowClose(WindowCloseEvent &event);
+
 		std::unique_ptr<Window> m_Window;
+		LayerStack m_LayerStack;
 		bool m_Running = true;
+
 	};
 
 	Application *CreateApplication();

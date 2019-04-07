@@ -26,7 +26,23 @@ namespace Engine {
 		EventDispatcher dispatcher(event);
 
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
-		ENGINE_LOG_INFO(event.ToString());
+		ENGINE_LOG_TRACE(event.ToString());
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		{
+			(*--it)->OnEvent(event);
+			if (event.Handled)
+				break;
+		}
+	}
+
+	void Application::PushLayer(Layer * layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer * layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 	}
 
 	void Application::Run()
@@ -35,6 +51,10 @@ namespace Engine {
 		{
 			glClearColor(1, 0.5f, 0, 0.44f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer *layer : m_LayerStack)
+				layer->OnUpdate();
+
 			m_Window->OnUpdate();
 		}
 	}
