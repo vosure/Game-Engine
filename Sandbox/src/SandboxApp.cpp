@@ -13,7 +13,7 @@ public:
 
 	void OnEvent(Engine::Event &event) override
 	{
-		CLIENT_LOG_TRACE(event.ToString());
+		CLIENT_LOG_INFO(event.ToString());
 	}
 };
 

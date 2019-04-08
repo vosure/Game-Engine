@@ -5,7 +5,7 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Log.h"
 
-#include <GLFW/glfw3.h>
+#include <GLAD/glad.h>
 
 namespace Engine {
 
