@@ -13,9 +13,11 @@ workspace "Engine"
  IncludeDir = {}
  IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
  IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
+ IncludeDir["ImGui"] = "Engine/vendor/ImGui"
 
  include "Engine/vendor/GLFW"
  include "Engine/vendor/GLAD"
+ include "Engine/vendor/ImGui"
 
 project "Engine"
 	location "Engine"
@@ -39,13 +41,15 @@ project "Engine"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}"
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
 		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -58,7 +62,8 @@ project "Engine"
 		{
 			"ENGINE_PLATFORM_WINDOWS",
 			"ENGINE_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE",
+			"IMGUI_IMPL_OPENGL_LOADER_GLAD"
 		}
 
 		postbuildcommands
