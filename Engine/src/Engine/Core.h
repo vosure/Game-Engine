@@ -34,3 +34,5 @@
 
 
 #define BIT(x) (1 << x)
+
+#define BIND_EVENT(function) std::bind(&function, this, std::placeholders::_1)

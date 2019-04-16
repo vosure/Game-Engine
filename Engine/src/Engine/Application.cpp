@@ -7,9 +7,11 @@
 
 #include <GLAD/glad.h>
 
+#include "Core.h"
+
 namespace Engine {
 
-#define BIND_EVENT(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 
 	Application *Application::s_Instance = nullptr;
 
@@ -19,7 +21,7 @@ namespace Engine {
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT(OnEvent));
+		m_Window->SetEventCallback(BIND_EVENT(Application::OnEvent));
 	}
 
 	Application::~Application()
@@ -30,7 +32,7 @@ namespace Engine {
 	{
 		EventDispatcher dispatcher(event);
 
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(Application::OnWindowClose));
 		ENGINE_LOG_TRACE(event.ToString());
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
