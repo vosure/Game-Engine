@@ -30,6 +30,8 @@ namespace Engine {
 
 		void SetVSync(bool enabled) override;
 		bool IsVSyncEnabled() const override;
+
+		inline virtual void *GetNativeWindow() const { return m_Window; };
 	private:
 		virtual void Init(const WindowProps &props);
 		virtual void ShutDown();
