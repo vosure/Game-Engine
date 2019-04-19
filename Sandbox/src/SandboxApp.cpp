@@ -13,7 +13,12 @@ public:
 
 	void OnEvent(Engine::Event &event) override
 	{
-		CLIENT_LOG_INFO(event.ToString());
+		if (event.GetEventType() == Engine::EventType::KeyPressed)
+		{
+			Engine::KeyPressedEvent &keyPressedEvent = (Engine::KeyPressedEvent &)event;
+
+			ENGINE_LOG_TRACE("{0}", (char)keyPressedEvent.GetKeyCode());
+		}
 	}
 };
 
