@@ -15,6 +15,7 @@ workspace "Engine"
  IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
  IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
  IncludeDir["ImGui"] = "Engine/vendor/ImGui"
+ IncludeDir["glm"] = "Engine/vendor/glm"
 
  include "Engine/vendor/GLFW"
  include "Engine/vendor/GLAD"
@@ -35,7 +36,9 @@ project "Engine"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 	
 	includedirs 
@@ -44,7 +47,8 @@ project "Engine"
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -105,7 +109,8 @@ project "Sandbox"
 	includedirs 
 	{
 		"Engine/vendor/spdlog/include",
-		"Engine/src"
+		"Engine/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
