@@ -1,27 +1,25 @@
 #include "enginepch.h"
-
 #include "Application.h"
 
-#include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Log.h"
 
-#include <GLAD/glad.h>
-
-#include "Core.h"
+#include <glad/glad.h>
 
 #include "Input.h"
 
 namespace Engine {
 
-	Application *Application::s_Instance = nullptr;
+#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
-		ENGINE_ASSERT(!s_Instance, "Application already exists")
-			s_Instance = this;
+		ENGINE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT(Application::OnEvent));
+		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -31,46 +29,43 @@ namespace Engine {
 	{
 	}
 
-	void Application::OnEvent(Event &event)
-	{
-		EventDispatcher dispatcher(event);
-
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(Application::OnWindowClose));
-		//ENGINE_LOG_TRACE(event.ToString());
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
-		{
-			(*--it)->OnEvent(event);
-			if (event.Handled)
-				break;
-		}
-	}
-
-	void Application::PushLayer(Layer * layer)
+	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer * layer)
+	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
+	}
+
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+		{
+			(*--it)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
 	}
 
 	void Application::Run()
 	{
 		while (m_Running)
 		{
-			glClearColor(1, 0.5f, 0, 0.44f);
+			glClearColor(0.7f, 0.3f, 0.6f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			for (Layer *layer : m_LayerStack)
+			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			auto[x, y] = Input::GetMousePosition();
-
 			m_ImGuiLayer->Begin();
-			for (Layer *layer : m_LayerStack)
+			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
@@ -78,13 +73,10 @@ namespace Engine {
 		}
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent &event)
+	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
 		return true;
 	}
-	Application * CreateApplication()
-	{
-		return nullptr;
-	}
+
 }
