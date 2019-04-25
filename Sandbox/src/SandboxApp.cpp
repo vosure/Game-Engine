@@ -1,5 +1,7 @@
 #include <Engine.h>
 
+#include "ImGui/imgui.h"
+
 class ExampleLayer : public Engine::Layer
 {
 public:
@@ -9,6 +11,13 @@ public:
 
 	void OnUpdate() override
 	{
+	}
+
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Kulity");
+		ImGui::End();
 	}
 
 	void OnEvent(Engine::Event &event) override
