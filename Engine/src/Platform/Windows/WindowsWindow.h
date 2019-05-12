@@ -1,7 +1,8 @@
 #pragma once 
 
 #include "Engine/Window.h";
-struct GLFWwindow;
+#include "Engine/Renderer/GraphicsContext.h"
+#include <GLFW/glfw3.h>
 
 namespace Engine {
 
@@ -37,6 +38,7 @@ namespace Engine {
 		virtual void ShutDown();
 	private:
 		GLFWwindow *m_Window;
+		GraphicsContext *m_Context;
 
 		struct WindowData
 		{
