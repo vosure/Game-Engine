@@ -33,6 +33,10 @@ namespace Engine {
 		LayerStack m_LayerStack;
 		bool m_Running = true;
 
+		unsigned int m_VertexArray;
+		unsigned int m_VertexBuffer;
+		unsigned int m_IndexBuffer;
+
 		static Application *s_Instance;
 	};
 
