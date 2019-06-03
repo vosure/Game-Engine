@@ -8,6 +8,8 @@
 
 #include "Engine/ImGui/ImGuiLayer.h"
 
+#include "Engine/Renderer/Shader.h"
+
 namespace Engine {
 
 	class ENGINE_API Application
@@ -36,6 +38,8 @@ namespace Engine {
 		unsigned int m_VertexArray;
 		unsigned int m_VertexBuffer;
 		unsigned int m_IndexBuffer;
+
+		std::unique_ptr<Shader> m_Shader;
 
 		static Application *s_Instance;
 	};
