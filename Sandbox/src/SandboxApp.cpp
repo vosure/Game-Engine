@@ -6,7 +6,7 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer() 
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
 
 		m_VertexArray.reset(Engine::VertexArray::Create());
@@ -116,10 +116,30 @@ public:
 		m_BlueShader.reset(new Engine::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Engine::Timestep ts) override
 	{
+		ENGINE_LOG_TRACE("Delta Time: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_LEFT))
+			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_RIGHT))
+			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_UP))
+			m_CameraPosition.y += m_CameraMoveSpeed * ts;
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_DOWN))
+			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
+			m_CameraRotation += m_CameraRotationSpeed * ts;
+
 		Engine::RenderCommand::SetClearColor({ 0.1f, 0.01f, 0.3f, 1.0f });
 		Engine::RenderCommand::Clear();
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
 		Engine::Renderer::BeginScene(m_Camera);
 		m_BlueShader->Bind();
@@ -145,6 +165,12 @@ private:
 	std::shared_ptr<Engine::VertexArray> m_SquareVA;
 
 	Engine::OrthographicCamera m_Camera;
+
+	glm::vec3 m_CameraPosition;
+	float m_CameraMoveSpeed = 5.0f;
+
+	float m_CameraRotation = 0.0f;
+	float m_CameraRotationSpeed = 5.0f;
 };
 
 class Sandbox : public Engine::Application

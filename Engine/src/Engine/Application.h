@@ -14,6 +14,8 @@
 
 #include "Renderer/OrthographicCamera.h"
 
+#include "Engine/Core/Timestep.h"
+
 
 namespace Engine {
 
@@ -32,13 +34,17 @@ namespace Engine {
 
 		static inline Application &Get() { return *s_Instance; }
 		inline Window &GetWindow() { return *m_Window; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent &event);
 
+	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer *m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+		float m_LastFrameTime = 0.0f;
+
 
 		static Application *s_Instance;
 	};
