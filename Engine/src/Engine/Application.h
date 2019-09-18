@@ -40,14 +40,6 @@ namespace Engine {
 		LayerStack m_LayerStack;
 		bool m_Running = true;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<Shader> m_BlueShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-
-		OrthographicCamera m_Camera;
-
 		static Application *s_Instance;
 	};
 
