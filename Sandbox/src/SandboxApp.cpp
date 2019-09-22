@@ -2,6 +2,11 @@
 
 #include "ImGui/imgui.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+#include "Platform/OpenGL/OpenGLShader.h"
+
 class ExampleLayer : public Engine::Layer
 {
 public:
@@ -86,7 +91,7 @@ public:
 			
 		)";
 
-		m_Shader.reset(new Engine::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -110,15 +115,15 @@ public:
 			layout(location = 0) out vec4 color;
 			in vec3 v_Position;
 	
-			uniform vec4 u_Color;
+			uniform vec3 u_Color;
 			
 			void main()
 			{
-				color = u_Color;
+				color = vec4(u_Color, 1.0);
 			}
 		)";
 
-		m_FlatColorShader.reset(new Engine::Shader(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		m_FlatColorShader.reset(Engine::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
@@ -150,8 +155,8 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		glm::vec4 color1 = glm::vec4(0.5f, 0.1f, 0.5f, 1.0f);
-		glm::vec4 color2 = glm::vec4(0.1f, 0.5f, 0.8f, 1.0f);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -159,11 +164,6 @@ public:
 			{
 				glm::vec3 position(x * 0.15f, y * 0.15f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0), position) * scale;
-
-				if (x % 2 == 0)
-					m_FlatColorShader->UploadUniformFloat4("u_Color", color1);
-				else
-					m_FlatColorShader->UploadUniformFloat4("u_Color", color2);
 
 				Engine::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
@@ -175,6 +175,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Color Settings");
+		ImGui::ColorPicker3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	void OnEvent(Engine::Event &event) override
@@ -196,6 +199,7 @@ private:
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 5.0f;
 
+	glm::vec3 m_SquareColor = { 0.2f, 0.5f, 0.9f };
 };
 
 class Sandbox : public Engine::Application
