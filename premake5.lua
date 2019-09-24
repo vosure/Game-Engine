@@ -16,6 +16,7 @@ workspace "Engine"
  IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
  IncludeDir["ImGui"] = "Engine/vendor/ImGui"
  IncludeDir["glm"] = "Engine/vendor/glm"
+ IncludeDir["stb_image"] = "Engine/vendor/stb_image"
 
  include "Engine/vendor/GLFW"
  include "Engine/vendor/GLAD"
@@ -38,6 +39,8 @@ project "Engine"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
@@ -54,7 +57,8 @@ project "Engine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links
