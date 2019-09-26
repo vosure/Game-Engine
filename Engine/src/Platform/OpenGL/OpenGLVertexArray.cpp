@@ -66,7 +66,7 @@ namespace Engine {
 				ConvertShaderDataTypeOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				nullptr);
+				(const void *) element.Offset);
 			index++;
 		}
 

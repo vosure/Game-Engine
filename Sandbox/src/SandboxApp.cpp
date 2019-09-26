@@ -152,6 +152,7 @@ public:
 			in vec2 v_TexCoord;
 	
 			uniform sampler2D u_Texture;
+			uniform vec3 u_Color;
 			
 			void main()
 			{
@@ -161,11 +162,13 @@ public:
 
 		m_TextureShader.reset(Engine::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 
-		m_Texture = Engine::Texture2D::Create("assets/textures/brickwallcheck.jpg");
-		m_Texture2 = Engine::Texture2D::Create("assets/textures/ChernoLogo.png");
+		m_Texture = Engine::Texture2D::Create("assets/textures/brickwall.jpg");
+		m_Texture2 = Engine::Texture2D::Create("assets/textures/roflan.png");
 
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
 	}
 
 	void OnUpdate(Engine::Timestep ts) override
@@ -200,6 +203,9 @@ public:
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_FlatColorShader)->Bind();
 		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_TextureShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
@@ -214,9 +220,8 @@ public:
 		m_Texture->Bind();
 		Engine::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-		//m_Texture2->Bind();
-		//Engine::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.25f, 0.0f)) * 
-			//glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_Texture2->Bind();
+		Engine::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		//Engine::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Engine::Renderer::EndScene();
