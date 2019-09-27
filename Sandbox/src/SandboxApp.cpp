@@ -92,7 +92,7 @@ public:
 			
 		)";
 
-		m_Shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Engine::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -124,9 +124,9 @@ public:
 			}
 		)";
 
-		m_FlatColorShader.reset(Engine::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		m_FlatColorShader = Engine::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-		m_TextureShader.reset(Engine::Shader::Create("assets/shaders/Texture.glsl"));
+		m_TextureShader = Engine::Shader::Create("assets/shaders/Texture.glsl");
 
 		m_Texture = Engine::Texture2D::Create("assets/textures/brickwall.jpg");
 		m_Texture2 = Engine::Texture2D::Create("assets/textures/roflan.png");

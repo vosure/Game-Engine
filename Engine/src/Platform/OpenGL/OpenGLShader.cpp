@@ -22,9 +22,16 @@ namespace Engine {
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0: lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string & vertexSrc, const std::string & fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string &name, std::string & vertexSrc, const std::string & fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -92,7 +99,7 @@ namespace Engine {
 	std::string OpenGLShader::ReadFile(const std::string & filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -129,7 +136,6 @@ namespace Engine {
 			pos = source.find(typeToken, nextLinePosition);
 			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePosition,
 				(pos - (nextLinePosition == std::string::npos ? source.size() - 1 : nextLinePosition)));
-
 		}
 
 		return shaderSources;
@@ -137,7 +143,9 @@ namespace Engine {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSource)
 	{
-		std::vector<GLenum> glShaderIDs(shaderSource.size());
+		ENGINE_ASSERT(shaderSource.size() <= 2, "CAN BE ONLY 2 SHADERS FOR NOW");
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderIDIndex = 0;
 
 		m_RendererID = glCreateProgram();
 		for (auto &kv : shaderSource)
@@ -169,7 +177,7 @@ namespace Engine {
 			}
 
 			glAttachShader(m_RendererID, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		glLinkProgram(m_RendererID);
