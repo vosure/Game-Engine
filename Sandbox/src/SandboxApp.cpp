@@ -11,7 +11,7 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+		: Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
 	{
 
 		m_VertexArray.reset(Engine::VertexArray::Create());
@@ -141,28 +141,12 @@ public:
 	{
 		ENGINE_LOG_TRACE("Delta Time: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
 
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
+		m_CameraController.OnUpdate(ts);
 
 		Engine::RenderCommand::SetClearColor({ 0.1f, 0.01f, 0.3f, 1.0f });
 		Engine::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Engine::Renderer::BeginScene(m_Camera);
+		Engine::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -202,6 +186,7 @@ public:
 
 	void OnEvent(Engine::Event &event) override
 	{
+		m_CameraController.OnEvent(event);
 	}
 
 private:
@@ -213,14 +198,7 @@ private:
 
 	Engine::Ref<Engine::Texture2D> m_Texture, m_Texture2;
 
-	Engine::OrthographicCamera m_Camera;
-
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 5.0f;
-
+	Engine::OrthographicCameraController m_CameraController;
 	glm::vec3 m_SquareColor = { 0.2f, 0.5f, 0.9f };
 };
 
