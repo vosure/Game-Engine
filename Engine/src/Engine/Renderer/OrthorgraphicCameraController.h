@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderer/OrthographicCamera.h"
-#include "Core/Timestep.h"
-#include "Events/MouseEvent.h"
-#include "Events/ApplicationEvent.h"
+#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Core/Timestep.h"
+#include "Engine/Events/MouseEvent.h"
+#include "Engine/Events/ApplicationEvent.h"
 
 namespace Engine {
 
@@ -18,6 +18,9 @@ namespace Engine {
 		const inline OrthographicCamera &GetCamera() const { return m_Camera; }
 		inline OrthographicCamera &GetCamera() { return m_Camera; }
 
+		const float GetZoomLevel() const { return m_ZoomLevel; }
+		void SetZoomLevel(float zoomLevel) { m_ZoomLevel = zoomLevel; }
+
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
@@ -27,7 +30,7 @@ namespace Engine {
 		float m_CameraRotation = 0.0f;
 
 		float m_CameraTranslationSpeed = 1.0f;
-		float m_CameraRotationSpeed = 25.0f;
+		float m_CameraRotationSpeed = 50.0f;
 
 		OrthographicCamera m_Camera;
 
