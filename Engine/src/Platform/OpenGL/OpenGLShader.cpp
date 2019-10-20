@@ -78,7 +78,7 @@ namespace Engine {
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
-	void OpenGLShader::UploadUniformFloa4(const std::string & name, const glm::vec4 & value)
+	void OpenGLShader::UploadUniformFloat4(const std::string & name, const glm::vec4 & value)
 	{
 		int location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4f(location, value.x, value.y, value.z, value.w);

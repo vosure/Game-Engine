@@ -7,6 +7,8 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public Engine::Layer
 {
 public:
@@ -14,7 +16,7 @@ public:
 		: Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
 	{
 
-		m_VertexArray.reset(Engine::VertexArray::Create());
+		m_VertexArray = Engine::VertexArray::Create();
 
 		float vertices[] =
 		{
@@ -38,7 +40,7 @@ public:
 		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		m_SquareVA.reset(Engine::VertexArray::Create());
+		m_SquareVA = Engine::VertexArray::Create();
 		float squareVertices[5 * 4] =
 		{
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -207,7 +209,8 @@ class Sandbox : public Engine::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()

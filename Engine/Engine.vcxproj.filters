@@ -1255,6 +1255,7 @@
       <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\OrthorgraphicCameraController.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\ImGui\ImGuiBuild.cpp">
@@ -1330,5 +1331,6 @@
       <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\OrthorgraphicCameraController.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>
