@@ -9,6 +9,8 @@
 
 #include "Engine/Core/EntryPoint.h"
 
+#include "Engine/Renderer/Renderer2D.h"
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
@@ -16,7 +18,7 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-
+	m_CheckerboardTexture = Engine::Texture2D::Create("assets/textures/roflan.png");
 }
 
 void Sandbox2D::OnDetach()
@@ -32,8 +34,9 @@ void Sandbox2D::OnUpdate(Engine::Timestep timestep)
 
 	Engine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, {0.6f, 0.1f, 0.2f, 1.0f});
+	Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.6f, 0.1f, 0.2f, 1.0f });
 	Engine::Renderer2D::DrawQuad({ 0.5f, 0.0f }, { 0.5f, 0.5f }, { 0.1f, 0.1f, 0.8f, 1.0f });
+	Engine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.f, 10.f }, m_CheckerboardTexture);
 
 	Engine::Renderer2D::EndScene();
 }
