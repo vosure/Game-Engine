@@ -1256,6 +1256,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\OrthorgraphicCameraController.h" />
     <ClInclude Include="src\Engine\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Engine\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\ImGui\ImGuiBuild.cpp">
