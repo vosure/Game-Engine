@@ -19,6 +19,7 @@ namespace Engine {
 
 	Application::Application()
 	{
+		ENGINE_PROFILE_FUNCTION();
 		ENGINE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
@@ -34,22 +35,31 @@ namespace Engine {
 
 	Application::~Application()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
+		Renderer::Shutdown();
 	}
 
-	void Application::PushLayer(Layer* layer)
+	void Application::PushLayer(Layer *layer)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer* layer)
+	void Application::PushOverlay(Layer *layer)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT(Application::OnWindowResize));
@@ -64,6 +74,8 @@ namespace Engine {
 
 	void Application::Run()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();
@@ -72,14 +84,23 @@ namespace Engine {
 
 			if (!m_Minimized)
 			{
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(timestep);
+				{
+					ENGINE_PROFILE_SCOPE("LayerStack OnUpdate");
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(timestep);
+				}
+
+				m_ImGuiLayer->Begin();
+				{
+					ENGINE_PROFILE_SCOPE("LayerStack OnImGuiRender");
+					for (Layer* layer : m_LayerStack)
+						layer->OnImGuiRender();
+				
+				}
+				m_ImGuiLayer->End();
 			}
 
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
+
 
 			m_Window->OnUpdate();
 		}

@@ -30,21 +30,29 @@ namespace Engine {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 

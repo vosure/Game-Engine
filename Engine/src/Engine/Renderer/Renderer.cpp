@@ -11,8 +11,17 @@ namespace Engine {
 
 	void Renderer::Init()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(unsigned int width, unsigned int height)
